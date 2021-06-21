@@ -161,6 +161,8 @@ func main() {
 	}
 
 	for i, radioRel := range res.Data.Relationships.PublishedAudiobooks.Data {
+		log.Println("Working on:", radioRel.ID)
+
 		var radio Entity
 		for _, radio = range res.Included {
 			if radio.ID == radioRel.ID && radio.Type == radioRel.Type {
@@ -172,6 +174,7 @@ func main() {
 		return
 
 	found:
+		log.Println("Found Radio:", radio.Attributes.Title)
 
 		mediaRel := radio.Relationships.Media.Data
 		var media Entity
@@ -185,6 +188,7 @@ func main() {
 		return
 
 	found2:
+		log.Println("Found media:", media.Attributes.MediaType, media.Attributes.Author)
 
 		audioFile := filepath.Join(OutputDirectory, fmt.Sprintf(
 			"%s-%03d-%s%s",
@@ -216,10 +220,14 @@ func main() {
 		}
 
 		var tag *id3v2.Tag
-		if tag, err = id3v2.Open(audioFile, id3v2.Options{Parse: true}); err != nil {
+		if tag, err = id3v2.Open(audioFile, id3v2.Options{Parse: false}); err != nil {
 			return
 		}
 
+		log.Println("Setting ID3 Info:", audioFile)
+
+		tag.DeleteAllFrames()
+		tag.SetDefaultEncoding(id3v2.EncodingUTF8)
 		tag.SetGenre("Audio Book")
 		tag.SetArtist(res.Data.Attributes.Author)
 		tag.SetAlbum(res.Data.Attributes.Title)
