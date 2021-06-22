@@ -8,6 +8,8 @@
 
 访问 https://github.com/go-guoyk/gcoredl/releases 下载编译好的二进制文件，请依照当前操作系统选择正确的文件
 
+(Windows 二进制文件可能需要手动添加 `.exe` 扩展名)
+
 ### 自己编译
 
 1. 安装 Golang
