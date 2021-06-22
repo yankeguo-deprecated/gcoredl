@@ -16,3 +16,12 @@
 
 # GoLand
 .idea/
+
+# macOS
+.DS_Store
+._*
+
+# Output
+output-*/
+dist/
+/gcoredl
